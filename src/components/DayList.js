@@ -10,7 +10,7 @@ export default function DayList(props) {
       selected={day.name === props.value}
       setDay={(event) => props.onChange(day.id)}
     />);
-
+  
   return (
     <ul>
       { days }
