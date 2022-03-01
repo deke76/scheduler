@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+// import { getAppointmentsForDay } from "helpers/selector";
 import axios from "axios";
 
 export default function useApplicationData() {
@@ -14,7 +15,13 @@ export default function useApplicationData() {
   const DAYS = 0; const APPTS = 1; const INTERVIEWERS = 2 ;
 
   const setDay = day => setState({...state, day });
-  const setAppointments = appointments => setState({...state, appointments});
+  const setAppointments = (appointments) => setState({...state, appointments});
+
+  // const updateSpots = function(id) {
+  //   let spotsRemaining = getAppointmentsForDay(state, state.day).filter( appointment => appointment.interview === null).length;
+  //   console.log(state.appointments[id]);
+  //   return spotsRemaining
+  // }
 
   useEffect(() => {
     Promise.all([
@@ -27,6 +34,7 @@ export default function useApplicationData() {
   }, []);
 
   const bookInterview = function(id, interview) {
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -36,13 +44,14 @@ export default function useApplicationData() {
       [id]: appointment
     };
     return axios
-      .put(`${appointmentsURL}/${appointments[id].id}`, appointment)
+      .put(`${appointmentsURL}/${id}`, appointment)
       .then((res) => {
         if (res.status === 204) setAppointments(appointments);
       });
   }
 
   const cancelInterview = function(id) {
+
     const appointment = {
     ...state.appointments[id],
     interview: null

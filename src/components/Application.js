@@ -24,7 +24,7 @@ export default function Application(props) {
         bookInterview={(id, interview) => bookInterview(id, interview)}
         onCancel={(id) => cancelInterview(id)}
       />));
-
+    
   return (
     <main className="layout">
       <section className="sidebar">
