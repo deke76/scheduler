@@ -18,9 +18,11 @@ export default function useApplicationData() {
   const setAppointments = (appointments) => setState({...state, appointments});
 
   const updateSpots = function(id) {
-    let spotsRemaining = getAppointmentsForDay(state, state.day).filter( appointment => appointment.interview === null).length;
-    console.log(state.appointments[id]);
-    return spotsRemaining
+    const dayDetails = [...state.days].filter(day => day.name === state.day)[0];
+    dayDetails.spots += 1;
+    const dayID =  dayDetails.id - 1;
+    console.log(dayID, dayDetails);
+    return { [dayID]: dayDetails }
   }
 
   useEffect(() => {
@@ -34,7 +36,18 @@ export default function useApplicationData() {
   }, []);
 
   const bookInterview = function(id, interview) {
+    console.log(state.appointments[id]);
+    const dayDetails = state.days.filter(day => day.name === state.day)[0];
+    dayDetails.spots -= 1;
+    const dayID =  dayDetails.id - 1;
 
+    console.log(dayID);
+    console.log(dayDetails);
+    
+    const days = {
+      ...state.days,
+      [dayID]: dayDetails
+    };
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -43,6 +56,7 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+
     return axios
       .put(`${appointmentsURL}/${id}`, appointment)
       .then((res) => {
@@ -52,12 +66,11 @@ export default function useApplicationData() {
 
   const cancelInterview = function(id) {
     
-    const dayDetails = state.days.filter(day => day.name === state.day)[0].spots++;
-    const dayID =  dayDetails.id - 1;
-
+    const newDay = updateSpots(id);
+    console.log(newDay);
     const days = {
       ...state.days,
-      [dayID]: dayDetails
+      // [dayID]: dayDetails
     };
     const appointment = {
     ...state.appointments[id],
@@ -67,6 +80,7 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+
     console.log(state);
     console.log(state.days);
     console.log(days);
