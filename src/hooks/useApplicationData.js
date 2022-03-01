@@ -33,7 +33,6 @@ export default function useApplicationData() {
 
   const updateSpots = function(id, callBack) {
     const dayDetails = [...state.days].filter(day => day.name === state.day)[0];
-    console.log(dayDetails === state.days[0]);
     dayDetails.spots = (callBack(dayDetails.spots));
     // const dayID =  dayDetails.id - 1;
     // return { [dayID]: dayDetails }
