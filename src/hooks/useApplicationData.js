@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { URL, DAYS, APPTS, INTERVIEWERS } from '../constants'
 import axios from "axios";
 
-
 export default function useApplicationData() {
   const [state, setState] = useState({
     day: 'Monday',
