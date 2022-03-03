@@ -32,13 +32,13 @@ Scripts setup include: start, build, test, eject, storybook, build-storybook, cy
 
 ## Screenshots
 
-!['Initial Appointments'](docs/scheduler-initial-appointments.png)
-!['Edit an existing appiointment'](docs/edit-appointment.png)
-!['New appointment form'](docs/new-appointment-form.png)
-!['New appointment form filled'](docs/new-appointment-filled.png)
-!['New appointment added to the schedule'](docs/new-appointment-added.png)
-!['Confirm appointment cancellation'](docs/cancel-booked-appointment.png)
-!['Confirmed appointment cancellation'](docs/appointment-deleted.png)
+!['Initial Appointments'](./docs/scheduler-initial-appointments.png)
+!['Edit an existing appiointment'](./docs/edit-appointment.png)
+!['New appointment form'](./docs/new-appointment-form.png)
+!['New appointment form filled'](./docs/new-appointment-filled.png)
+!['New appointment added to the schedule'](./docs/new-appointment-added.png)
+!['Confirm appointment cancellation'](./docs/cancel-booked-appointment.png)
+!['Confirmed appointment cancellation'](./docs/appointment-deleted.png)
 
 ## Run Instructions
 Start locally by ruunning npm start which will start an instance at port 8000 for the client in the scheduler directory.  
