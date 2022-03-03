@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import InterviewerList from 'components/InterviewerList';
-import Button from 'components/Button';
+import { Button, InterviewerList } from '../../constants'
 
 export default function Form(props) {
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
@@ -51,7 +50,7 @@ export default function Form(props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button danger onClick={cancel}>Cancel</Button>
-          <Button confirm onClick={validate}>Save</Button>
+          {student && interviewer && <Button confirm onClick={validate}>Save</Button>}
         </section>
       </section>
     </main>

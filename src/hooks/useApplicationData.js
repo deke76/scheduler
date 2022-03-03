@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { URL, DAYS, APPTS, INTERVIEWERS} from '../constants'
+import { URL, DAYS, APPTS, INTERVIEWERS } from '../constants'
 import axios from "axios";
 
 
