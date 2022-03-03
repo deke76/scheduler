@@ -26,7 +26,7 @@ npm run storybook
 ```
 
 ## Scripts available
-Scripts setup include: start, build, test, eject, storybook, build-storybook, cypress.  As a reminder any can be run with ```npm run <script>```.
+Scripts setup include: start, build, test, eject, storybook, build-storybook, cypress.  As a reminder any script can be run with ```npm run <script>```.
 
 ## Screenshots
 
