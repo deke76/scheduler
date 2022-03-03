@@ -41,7 +41,7 @@ Scripts setup include: start, build, test, eject, storybook, build-storybook, cy
 !['Confirmed appointment cancellation'](../docs/appointment-deleted.png)
 
 ## Run Instructions
-Start locally by ruunning npm start which will start an instance at port 8000 for the client in the scheduler directory.  
+Start locally by running npm start which will start an instance at port 8000 for the client in the scheduler directory.  
 
 The server requires npm start to fire up in development mode while ```npm run test:server``` fires a test server and ```npm run error``` to verify axios error catching in the schduler-api director.
 
