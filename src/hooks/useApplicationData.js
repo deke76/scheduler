@@ -31,12 +31,10 @@ export default function useApplicationData() {
   }
   const deleteSpot = spots => spots += 1;
 
-  const updateSpots2 = function(value) {
-    console.log(value);
-  }
-
   const updateSpots = function(id, callBack) {
-    const dayDetails = [...state.days].filter(day => day.name === state.day)[0];
+    
+    const dayDetails = state.days.filter(day => day.name === state.day)[0];
+    
     dayDetails.spots = (callBack(dayDetails.spots));
     // const dayID =  dayDetails.id - 1;
     // return { [dayID]: dayDetails }
