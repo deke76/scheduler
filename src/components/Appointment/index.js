@@ -8,66 +8,49 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error"
 import useVisualMode from "hooks/useVisualMode";
+import { SCREENS } from '../../constants'
 
 export default function Appointment(props) {
-  const EMPTY = 'EMPTY';
-  const SHOW = 'SHOW';
-  const CREATE = 'CREATE';
-  const SAVING = 'SAVING';
-  const DELETING = 'DELETING';
-  const CONFIRM = 'CONFIRM';
-  const EDIT = 'EDIT';
-  const ERROR_SAVE = 'ERROR_SAVE';
-  const ERROR_DELETE = 'ERROR_DELETE';
-
   const { mode, transition, back } = useVisualMode(
-    props.interview ? SHOW : EMPTY);
+    props.interview ? SCREENS.SHOW : SCREENS.EMPTY);
 
   const save = function(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
-    transition(SAVING);
+    transition(SCREENS.SAVING);
     props.bookInterview(props.id, interview)
-      .then(() => transition(SHOW))
-      .catch(error => transition(ERROR_SAVE));
+      .then(() => transition(SCREENS.SHOW))
+      .catch(error => transition(SCREENS.ERROR_SAVE));
   }
 
   const cancel = function(id) {
-    transition(DELETING, true);
+    transition(SCREENS.DELETING, true);
     props.onCancel(id)
-      .then(() => transition(EMPTY))
-      .catch(error => transition(ERROR_DELETE, true));
+      .then(() => transition(SCREENS.EMPTY))
+      .catch(error => {console.log(error); transition(SCREENS.ERROR_DELETE, true)});
   }
 
   return (
     <article className='appointment'>
       <Header time={props.time} />
-      {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      
-      {mode === SHOW && (
+      {mode === SCREENS.EMPTY && <Empty onAdd={() => transition(SCREENS.CREATE)} />}
+      {mode === SCREENS.SHOW && (
         <Show
           student={props.interview.student}
           interviewer={props.state.interviewers[props.interview.interviewer]} 
-          onEdit={() => transition(EDIT)}
-          onDelete={() => transition(CONFIRM)} /> 
+          onEdit={() => transition(SCREENS.EDIT)}
+          onDelete={() => transition(SCREENS.CONFIRM)} /> 
       )}
 
-      {mode === CREATE && (
-        <Form
-          interviewers={props.interviewers}
-          onCancel={() => back()}
-          onSave={(name, interviewer) => save(name, interviewer)} />
-      )}
+      {mode === SCREENS.SAVING && <Status message={'Saving'} />}
+      {mode === SCREENS.ERROR_SAVE && <Error message={'Could not save.'} onClose={() => back()} />}
 
-      {mode === SAVING && <Status message={'Saving'} />}
-      {mode === ERROR_SAVE && <Error message={'Could not save.'} onClose={() => back()} />}
+      {mode === SCREENS.DELETING && <Status message={'Deleting'} />}
+      {mode === SCREENS.ERROR_DELETE && <Error message={'Could not cancel appointment'} onClose={() => back()} />}
 
-      {mode === DELETING && <Status message={'Deleting'} />}
-      {mode === ERROR_DELETE && <Error message={'Could not cancel appointment'} onClose={() => back()} />}
-
-      {mode === CONFIRM && (
+      {mode === SCREENS.CONFIRM && (
         <Confirm
           message="Cancel the appointment?"
           onCancel={() => back()} 
@@ -75,9 +58,15 @@ export default function Appointment(props) {
         />
       )}
 
-      {mode === EDIT && (
+      {mode === SCREENS.CREATE && (
         <Form
-          name={props.interview.student}
+          interviewers={props.interviewers}
+          onCancel={() => back()}
+          onSave={(name, interviewer) => save(name, interviewer)} />
+      )}
+      {mode === SCREENS.EDIT && (
+        <Form
+          student={props.interview.student}
           interviewer={props.interviewers.filter(interviewer => interviewer.id === props.interview.interviewer)[0].id}
           interviewers={props.interviewers}
           onCancel={() => back()}

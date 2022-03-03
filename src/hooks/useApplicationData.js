@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { URL, DAYS, APPTS, INTERVIEWERS} from '../constants'
 import axios from "axios";
+
 
 export default function useApplicationData() {
   const [state, setState] = useState({
@@ -8,42 +10,35 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {}
   });
-  const daysURL = '/api/days';
-  const appointmentsURL = '/api/appointments';
-  const interviewersURL = '/api/interviewers';
-  const DAYS = 0; const APPTS = 1; const INTERVIEWERS = 2 ;
-
-  const setDay = day => setState({...state, day });
-  const setAppointments = (appointments) => setState({...state, appointments});
 
   useEffect(() => {
     Promise.all([
-      axios.get(daysURL),
-      axios.get(appointmentsURL),
-      axios.get(interviewersURL)
+      axios.get(URL.DAYS),
+      axios.get(URL.APPOINTMENTS),
+      axios.get(URL.INTERVIEWERS)
     ]).then( all => {
       setState(prev => ({...prev, days: all[DAYS].data, appointments: all[APPTS].data, interviewers: all[INTERVIEWERS].data }))
     })
   }, []);
 
-  const addOrEditSpots = function(appointment) {
-    return (appointment === null) ? (spots => spots -= 1 ) : (spots => spots );
-  }
-  const deleteSpot = spots => spots += 1;
+  const setDay = day => setState({...state, day });
 
-  const updateSpots = function(id, callBack) {
-    
-    const dayDetails = state.days.filter(day => day.name === state.day)[0];
-    
-    dayDetails.spots = (callBack(dayDetails.spots));
-    // const dayID =  dayDetails.id - 1;
-    // return { [dayID]: dayDetails }
-  }
+  const updateSpots = function(appointments) {
+    const spotsLeft = state.days[0].appointments.filter(apptID => appointments[apptID].interview === null).length;
+    const dayDeets = state.days.map((day) => {
+      if (day.name === state.day) {
+        return {
+          ...day,
+          spots: spotsLeft
+        }
+      }
+      return day;
+    });
+    return dayDeets;
+  };
 
   const bookInterview = function(id, interview) {
-    const days = {
-      ...state.days
-    };
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -53,20 +48,19 @@ export default function useApplicationData() {
       [id]: appointment
     };
 
+    const days = updateSpots(appointments);
+    
     return axios
-      .put(`${appointmentsURL}/${id}`, appointment)
+      .put(`${URL.APPOINTMENTS}/${id}`, appointment)
       .then((res) => {
         if (res.status === 204) {
-          updateSpots(id, addOrEditSpots(state.appointments[id].interview));
-          setAppointments(appointments);  
+          setState(prev => ({ ...prev, appointments: appointments, days: days }));
         }
       });
   }
 
   const cancelInterview = function(id) {
-    const days = {
-      ...state.days
-    };
+
     const appointment = {
     ...state.appointments[id],
     interview: null
@@ -75,12 +69,12 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-
+    const days = updateSpots(appointments);
+    
     return axios
-      .delete(`${appointmentsURL}/${id}`, appointments)
+      .delete(`${URL.APPOINTMENTS}/${id}`, appointments)
       .then((res) => {
-        updateSpots(id, deleteSpot);
-        setAppointments(appointments);
+        setState(prev => ({ ...prev, appointments: appointments, days: days }));
       });
     }
 
