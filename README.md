@@ -32,7 +32,7 @@ Scripts setup include: start, build, test, eject, storybook, build-storybook, cy
 
 ## Screenshots
 
-!['Initial Appointments'](./docs/scheduler-initial-appointments.png)
+!['Initial Appointments'](docs/scheduler-initial-appointments.png)
 !['Edit an existing appiointment'](./docs/edit-appointment.png)
 !['New appointment form'](./docs/new-appointment-form.png)
 !['New appointment form filled'](./docs/new-appointment-filled.png)
