@@ -31,6 +31,10 @@ export default function useApplicationData() {
   }
   const deleteSpot = spots => spots += 1;
 
+  const updateSpots2 = function(value) {
+    console.log(value);
+  }
+
   const updateSpots = function(id, callBack) {
     const dayDetails = [...state.days].filter(day => day.name === state.day)[0];
     dayDetails.spots = (callBack(dayDetails.spots));
@@ -39,10 +43,9 @@ export default function useApplicationData() {
   }
 
   const bookInterview = function(id, interview) {
-    // const days = {
-    //   ...state.days,
-    //   ...updateSpots(id, addOrEditSpots(state.appointments[id].interview))
-    // };
+    const days = {
+      ...state.days
+    };
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -63,10 +66,9 @@ export default function useApplicationData() {
   }
 
   const cancelInterview = function(id) {
-    // const days = {
-    //   ...state.days,
-    //   ...updateSpots(id, deleteSpot)
-    // };
+    const days = {
+      ...state.days
+    };
     const appointment = {
     ...state.appointments[id],
     interview: null

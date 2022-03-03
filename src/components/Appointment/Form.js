@@ -5,6 +5,27 @@ import Button from 'components/Button';
 export default function Form(props) {
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [student, setStudent] = useState(props.student || "");
+  const [error, setError] = useState("");
+
+  const reset = function() {
+    setError("");
+    setStudent("");
+    setInterviewer("");
+  }
+  
+  const cancel = function() {
+    reset();
+    props.onCancel();
+  }
+
+  const validate = function() {
+    if (student === "") {
+      setError("Student name cannot be blank")
+      return;
+    }
+    setError("");
+    props.onSave(student, interviewer)
+  }
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -12,14 +33,15 @@ export default function Form(props) {
         <form autoComplete="off" onSubmit={(event) => event.preventDefault()}>
           <input
             className="appointment__create-input text--semi-bold"
+            data-testid={"student-name-input"}
             name="name"
             type="text"
-            placeholder={props.placeholder ? props.placeholder : "Enter Student Name"}
+            placeholder={"Enter Student Name"}
             value={student}
             onChange={(event) => setStudent(event.target.value)} />
         </form>
+        <section className="appointment__validation">{error}</section>
         <InterviewerList 
-            /* your code goes here */
             interviewers={props.interviewers}
             value={interviewer}
             onChange={ setInterviewer }
@@ -27,8 +49,8 @@ export default function Form(props) {
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button danger onClick={props.onCancel}>Cancel</Button>
-          {(student || props.placeholder) && interviewer && <Button confirm onClick={() => props.onSave(student, interviewer)}>Save</Button>}
+          <Button danger onClick={cancel}>Cancel</Button>
+          <Button confirm onClick={validate}>Save</Button>
         </section>
       </section>
     </main>

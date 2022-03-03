@@ -77,7 +77,7 @@ export default function Appointment(props) {
 
       {mode === EDIT && (
         <Form
-          placeholder={props.interview.student}
+          name={props.interview.student}
           interviewer={props.interviewers.filter(interviewer => interviewer.id === props.interview.interviewer)[0].id}
           interviewers={props.interviewers}
           onCancel={() => back()}
