@@ -1,6 +1,7 @@
 import React from 'react';
 import { InterviewerList } from "../../constants"
 
+// Show a booked appointment with the student name and interviewer name & avatar
 export default function Show(props) {
   return (
     <main className="appointment__card appointment__card--show">

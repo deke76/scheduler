@@ -23,7 +23,18 @@ export default function useApplicationData() {
   const setDay = day => setState({...state, day });
 
   const updateSpots = function(appointments) {
-    const spotsLeft = state.days[0].appointments.filter(apptID => appointments[apptID].interview === null).length;
+    // Find the index to use for the state.appointments search
+    let currentDay = 0;
+    for (const day of state.days) {
+      if (day.name === state.day) {
+        currentDay = (day.id - 1);
+      }
+    };
+
+    // Find the appointments for the current day that are unfilled (spots still open)
+    const spotsLeft = state.days[currentDay].appointments.filter(apptID => appointments[apptID].interview === null).length;
+
+    // Map the days array and set the number of spots
     const dayDeets = state.days.map((day) => {
       if (day.name === state.day) {
         return {

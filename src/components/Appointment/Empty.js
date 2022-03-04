@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Empty interview, used to call the Form to create an appointment.
 export default function Empty(props) {
 
   return (

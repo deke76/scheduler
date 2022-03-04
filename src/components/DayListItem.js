@@ -2,8 +2,9 @@ import React from 'react';
 import classNames from "classnames";
 import "components/DayListItem.scss";
 
+// Details for specific day, indicate if selected and show number of spots remaining
 export default function DayListItem(props) {
-  // console.log('dayListItems', props);
+
   const dayClass = 
     classNames('day-list__item', {
       'day-list__item--selected': props.selected,

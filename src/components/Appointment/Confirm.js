@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../../constants';
 
+// Provides confirmation prior to deleting an interview
 export default function Confirm (props) {
 
   return (

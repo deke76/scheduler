@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Error form called when issues arise on database interations
 export default function Error(props) {
 
   return (

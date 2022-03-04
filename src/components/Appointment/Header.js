@@ -1,5 +1,6 @@
 import React from "react";
 
+// Time slot header for each interview slot
 export default function Header(props) {
   
   return (

@@ -2,6 +2,7 @@ import React from "react";
 import "components/Application.scss";
 import { DayList, Appointment, useApplicationData, getAppointmentsForDay, getInterviewersForDay } from "../constants";
 
+// Main application file
 export default function Application(props) {
   const {
     state,

@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import "./InterviewerListItem.scss";
 
+// Displays details of specific interviewer in the show form
 export default function InterviewerListItem (props) {
 const interviewerClass = 
   classNames('interviewers__item', {

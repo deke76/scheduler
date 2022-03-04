@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Transition screen used to indicate action is happening
 export default function Status(props) {
 
   return (
