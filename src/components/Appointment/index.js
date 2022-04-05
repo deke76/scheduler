@@ -6,8 +6,7 @@ import { SCREENS, Header, Show, Empty, Form, Status, Error, Confirm, useVisualMo
 export default function Appointment(props) {
 
   // Bring in the current screen mode and functions to transition screens forward and back
-  const { mode, transition, back } = useVisualMode(
-    props.interview ? SCREENS.SHOW : SCREENS.EMPTY);
+  const { mode, transition, back } = useVisualMode(props.interview ? SCREENS.SHOW : SCREENS.EMPTY);
 
   // Save an appointment and call the bookInterview function found in the useApplicationData (passed as a prop)
   const save = function(name, interviewer) {
