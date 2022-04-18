@@ -65,7 +65,7 @@ export default function useApplicationData() {
     return dayDeets;
   };
 
-  const bookInterview = function(id, interview) {
+  const bookInterview = function(id, interview, axiosRequest) {
 
     const appointment = {
       ...state.appointments[id],
@@ -78,33 +78,12 @@ export default function useApplicationData() {
 
     const days = updateSpots(appointments);
     
-    return axios
-      .put(`${URL.APPOINTMENTS}/${id}`, appointment)
+    return axiosRequest(`${URL.APPOINTMENTS}/${id}`, appointment)
       .then((res) => {
         if (res.status === 204) {
           dispatch({type: 'SET_INTERVIEWS', appointments: appointments, days: days });
         }
       });
   }
-
-  const cancelInterview = function(id) {
-
-    const appointment = {
-    ...state.appointments[id],
-    interview: null
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    const days = updateSpots(appointments);
-    
-    return axios
-      .delete(`${URL.APPOINTMENTS}/${id}`, appointments)
-      .then((res) => {
-        dispatch({type: 'SET_INTERVIEWS', appointments: appointments, days: days });
-      });
-    }
-
-  return { state, setDay, bookInterview, cancelInterview }
+  return { state, setDay, bookInterview }
 }

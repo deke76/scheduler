@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import "components/Application.scss";
 import { DayList, Appointment, useApplicationData, getAppointmentsForDay, getInterviewersForDay } from "../constants";
 
@@ -19,8 +20,8 @@ export default function Application(props) {
         {...appointment}
         interviewers={dailyInterviewers}
         state={state}
-        bookInterview={(id, interview) => bookInterview(id, interview)}
-        onCancel={(id) => cancelInterview(id)}
+        bookInterview={(id, interview) => bookInterview(id, interview, axios.put)}
+        onCancel={(id) => bookInterview(id, null, axios.delete)}
       />));
     
   return (

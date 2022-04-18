@@ -24,7 +24,7 @@ export function getAppointmentsForDay(state, day) {
   return arrayDayAppointments;
 }
 
-// Get a list of people available for intervies for the day
+// Get a list of people available for interviews for the day
 export function getInterviewersForDay(state, day) {
   // Setup the return array
   const arrayDayInterviewers = [];

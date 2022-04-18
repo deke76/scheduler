@@ -1,6 +1,7 @@
-import React from "react"
+import React from "react";
 import "./styles.scss";
-import { SCREENS, Header, Show, Empty, Form, Status, Error, Confirm, useVisualMode } from '../../constants'
+import { SCREENS, Header, Show, Empty, Form, Status, Error, Confirm, useVisualMode } from '../../constants';
+import axios from 'axios';
 
 // Appointment screen that handles placement of interview slots and screen setting
 export default function Appointment(props) {
@@ -15,7 +16,7 @@ export default function Appointment(props) {
       interviewer
     };
     transition(SCREENS.SAVING);
-    props.bookInterview(props.id, interview)
+    props.bookInterview(props.id, interview, axios.put)
       .then(() => transition(SCREENS.SHOW))
       .catch(error => transition(SCREENS.ERROR_SAVE));
   }
