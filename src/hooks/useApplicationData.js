@@ -1,27 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { URL, DAYS, APPTS, INTERVIEWERS } from '../constants'
 import axios from "axios";
 
 export default function useApplicationData() {
-  const [state, setState] = useState({
+  // Reducer setup and functions.
+  const reducer = function(state, action) {
+    return reducers[action.type](state, action) || state;
+  };
+
+  const reducers = {
+    SET_DAY(state, action) {
+      return state = ({...state, day: action.day });
+    },
+    SET_APP_DATA(state, action) {
+      return state = ({...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers });
+    },
+    SET_INTERVIEWS(state, action) {
+      return state = ({...state, days: action.days, appointments: action.appointments });
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, {
     day: 'Monday',
     days: [],
     appointments: {},
     interviewers: {}
   });
-
+  
   useEffect(() => {
     Promise.all([
       axios.get(URL.DAYS),
       axios.get(URL.APPOINTMENTS),
       axios.get(URL.INTERVIEWERS)
     ]).then( all => {
-      setState(prev => ({...prev, days: all[DAYS].data, appointments: all[APPTS].data, interviewers: all[INTERVIEWERS].data }))
+      dispatch({ type: 'SET_APP_DATA', days: all[DAYS].data, appointments: all[APPTS].data, interviewers: all[INTERVIEWERS].data } ) 
+      // (prev => ({...prev, days: all[DAYS].data, appointments: all[APPTS].data, interviewers: all[INTERVIEWERS].data }))
     })
   }, []);
-
-  const setDay = day => setState({...state, day });
-
+  
+  const setDay = day => dispatch( {type: 'SET_DAY', day: day });
+  
   const updateSpots = function(appointments) {
     // Find the index to use for the state.appointments search
     let currentDay = 0;
@@ -64,7 +82,7 @@ export default function useApplicationData() {
       .put(`${URL.APPOINTMENTS}/${id}`, appointment)
       .then((res) => {
         if (res.status === 204) {
-          setState(prev => ({ ...prev, appointments: appointments, days: days }));
+          dispatch({type: 'SET_INTERVIEWS', appointments: appointments, days: days });
         }
       });
   }
@@ -84,7 +102,7 @@ export default function useApplicationData() {
     return axios
       .delete(`${URL.APPOINTMENTS}/${id}`, appointments)
       .then((res) => {
-        setState(prev => ({ ...prev, appointments: appointments, days: days }));
+        dispatch({type: 'SET_INTERVIEWS', appointments: appointments, days: days });
       });
     }
 
