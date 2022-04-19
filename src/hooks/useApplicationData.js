@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { URL, DAYS, APPTS, INTERVIEWERS } from '../constants'
 import axios from "axios";
 
@@ -34,8 +34,28 @@ export default function useApplicationData() {
       axios.get(URL.INTERVIEWERS)
     ]).then( all => {
       dispatch({ type: 'SET_APP_DATA', days: all[DAYS].data, appointments: all[APPTS].data, interviewers: all[INTERVIEWERS].data } ) 
-      // (prev => ({...prev, days: all[DAYS].data, appointments: all[APPTS].data, interviewers: all[INTERVIEWERS].data }))
     })
+
+    // enable WebSockets
+    // let webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+    // webSocket.onmessage = event => {
+    // const message = JSON.parse(event.data);
+
+    // if (message.type === 'SET_INTERVIEWS') {
+    //   const {id, interview } = message;
+    //   const appointment = {
+    //     ...state.appointments[id],
+    //     interview: { ...interview }
+    //   };
+    //   const appointments = {
+    //     ...state.appointments,
+    //     [id]: appointment
+    //   };
+    //   const days = updateSpots(appointments);
+    //   return dispatch({type: 'SET_INTERVIEWS', appointments: appointments, days: days });
+    // }
+    // return () => webSocket.close();
+    // }
   }, []);
   
   const setDay = day => dispatch( {type: 'SET_DAY', day: day });
