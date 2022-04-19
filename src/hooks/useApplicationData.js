@@ -15,7 +15,7 @@ export default function useApplicationData() {
     SET_APP_DATA(state, action) {
       return state = ({...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers });
     },
-    SET_INTERVIEWS(state, action) {
+    SET_INTERVIEW(state, action) {
       return state = ({...state, days: action.days, appointments: action.appointments });
     }
   };
@@ -37,21 +37,14 @@ export default function useApplicationData() {
     })
 
     // enable WebSockets
-    // let webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
-    // webSocket.onmessage = event => {
-    // const message = JSON.parse(event.data);
-
+    let webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+    webSocket.onmessage = event => {
+    const message = JSON.parse(event.data)
+  console.log(message);
+};
+    
     // if (message.type === 'SET_INTERVIEWS') {
     //   const {id, interview } = message;
-    //   const appointment = {
-    //     ...state.appointments[id],
-    //     interview: { ...interview }
-    //   };
-    //   const appointments = {
-    //     ...state.appointments,
-    //     [id]: appointment
-    //   };
-    //   const days = updateSpots(appointments);
     //   return dispatch({type: 'SET_INTERVIEWS', appointments: appointments, days: days });
     // }
     // return () => webSocket.close();
@@ -98,10 +91,10 @@ export default function useApplicationData() {
 
     const days = updateSpots(appointments);
     
-    return axiosRequest(`${URL.APPOINTMENTS}/${id}`, appointment)
+    return axiosRequest(`${URL.APPOINTMENTS}/${id}`, { interview })
       .then((res) => {
         if (res.status === 204) {
-          dispatch({type: 'SET_INTERVIEWS', appointments: appointments, days: days });
+          dispatch({type: 'SET_INTERVIEW', appointments: appointments, days: days });
         }
       });
   }
