@@ -53,7 +53,7 @@ export default function useApplicationData() {
   
   const setDay = day => dispatch( {type: 'SET_DAY', day: day });
   
-  const updateSpots = function(appointments) {
+  const updateSpots = function(state) {
     // Find the index to use for the state.appointments search
     let currentDay = 0;
     for (const day of state.days) {
@@ -61,10 +61,11 @@ export default function useApplicationData() {
         currentDay = (day.id - 1);
       }
     };
-
+    console.log(state.days);
     // Find the appointments for the current day that are unfilled (spots still open)
-    const spotsLeft = state.days[currentDay].appointments.filter(apptID => appointments[apptID].interview === null).length;
-
+    const spotsLeft = state.days[currentDay].appointments.filter(apptID => state.appointments[apptID].interview === null).length;
+    console.log(spotsLeft);
+    console.log(state.days);
     // Map the days array and set the number of spots
     const dayDeets = state.days.map((day) => {
       if (day.name === state.day) {
@@ -75,26 +76,27 @@ export default function useApplicationData() {
       }
       return day;
     });
+    console.log(dayDeets);
     return dayDeets;
   };
 
   const bookInterview = function(id, interview, axiosRequest) {
-
     const appointment = {
       ...state.appointments[id],
-      interview: { ...interview }
+      interview: !interview ? null : { ...interview }
     };
+
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
-
-    const days = updateSpots(appointments);
+    
+    const days = updateSpots({ ...state, appointments });
     
     return axiosRequest(`${URL.APPOINTMENTS}/${id}`, { interview })
       .then((res) => {
         if (res.status === 204) {
-          dispatch({type: 'SET_INTERVIEW', appointments: appointments, days: days });
+          dispatch({type: 'SET_INTERVIEW', id, interview, appointments: appointments, days: days });
         }
       });
   }
