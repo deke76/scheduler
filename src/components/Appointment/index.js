@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./styles.scss";
 import { SCREENS, Header, Show, Empty, Form, Status, Error, Confirm, useVisualMode } from '../../constants';
 import axios from 'axios';
@@ -8,6 +8,16 @@ export default function Appointment(props) {
 
   // Bring in the current screen mode and functions to transition screens forward and back
   const { mode, transition, back } = useVisualMode(props.interview ? SCREENS.SHOW : SCREENS.EMPTY);
+  
+  useEffect(() => {
+    if (props.interview && mode === SCREENS.EMPTY) {
+     transition(SCREENS.SHOW);
+    }
+    if (props.interview === null && mode === SCREENS.SHOW) {
+     transition(SCREENS.EMPTY);
+    }
+   }, [props.interview, transition, mode]);  
+
 
   // Save an appointment and call the bookInterview function found in the useApplicationData (passed as a prop)
   const save = function(name, interviewer) {
@@ -21,7 +31,7 @@ export default function Appointment(props) {
       .catch(error => transition(SCREENS.ERROR_SAVE));
   }
 
-  // Delete an appointment and begin the call to cancelInterview through the callback function onOncancel (passed as a prop)
+  // Delete an appointment and begin the call to cancelInterview through the callback function onCancel (passed as a prop)
   const cancel = function(id) {
     transition(SCREENS.DELETING, true);
     props.onCancel(id)
@@ -39,7 +49,7 @@ export default function Appointment(props) {
       {mode === SCREENS.ERROR_SAVE && <Error message={'Could not save.'} onClose={() => back()} />}
       {mode === SCREENS.DELETING && <Status message={'Deleting'} />}
       {mode === SCREENS.ERROR_DELETE && <Error message={'Could not cancel appointment'} onClose={() => back()} />}
-      {mode === SCREENS.SHOW && (
+      {mode === SCREENS.SHOW && props.interview && (
         <Show
           student={props.interview.student}
           interviewer={props.state.interviewers[props.interview.interviewer]} 
